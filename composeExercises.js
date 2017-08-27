@@ -55,34 +55,40 @@ export const isLastInStock = _.compose(_.prop("in_stock"), _.last);
 // Exercise 2:
 // ============
 // Use _.compose(), _.prop() and _.head() to retrieve the name of the first car.
-var nameOfFirstCar = undefined;
+export const nameOfFirstCar = _.compose(_.prop("name"), _.head);
 
 // Exercise 3:
 // ============
 // Use the helper function _average to refactor averageDollarValue as a composition.
-var _average = function(xs) {
+const _average = function(xs) {
   return _.reduce(_.add, 0, xs) / xs.length;
 }; // <- leave be
 
+/*
 var averageDollarValue = function(cars) {
   var dollar_values = _.map(function(c) {
     return c.dollar_value;
   }, cars);
   return _average(dollar_values);
-};
+};*/
+export const averageDollarValue = _.compose(
+  _average,
+  _.map(_.prop("dollar_value"))
+);
 
 // Exercise 4:
 // ============
 // Write a function: sanitizeNames() using compose that returns a list of lowercase and underscored car's names: e.g: sanitizeNames([{name: 'Ferrari FF', horsepower: 660, dollar_value: 700000, in_stock: true}]) //=> ['ferrari_ff'].
 
-var _underscore = _.replace(/\W+/g, "_"); //<-- leave this alone and use to sanitize
-
-var sanitizeNames = undefined;
+const _underscore = _.replace(/\W+/g, "_"); //<-- leave this alone and use to sanitize
+export const sanitizeNames = _.map(
+  _.compose(_underscore, _.toLower, _.prop("name"))
+);
 
 // Bonus 1:
 // ============
 // Refactor availablePrices with compose.
-
+/*
 var availablePrices = function(cars) {
   var available_cars = _.filter(_.prop("in_stock"), cars);
   return available_cars
@@ -90,16 +96,25 @@ var availablePrices = function(cars) {
       return accounting.formatMoney(x.dollar_value);
     })
     .join(", ");
-};
+};*/
 
+const formatMoney = val => `USD ${val}`;
+const formatPrice = _.compose(formatMoney, _.prop("dollar_value"));
+export const availablePrices = _.compose(
+  _.join(", "),
+  _.map(formatPrice),
+  _.filter(_.prop("in_stock"))
+);
 // Bonus 2:
 // ============
 // Refactor to pointfree. Hint: you can use _.flip().
-
+/*
 var fastestCar = function(cars) {
   var sorted = _.sortBy(function(car) {
     return car.horsepower;
   }, cars);
   var fastest = _.last(sorted);
   return fastest.name + " is the fastest";
-};
+};*/
+
+export const fastestCar = _.compose(_.prop("name"), _.last, _.sortBy(_.prop("horsepower")))
