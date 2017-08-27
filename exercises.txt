@@ -1,0 +1,8 @@
+Node school
+https://nodeschool.io
+
+Hackerrank
+https://www.hackerrank.com/domains/fp/intro
+
+Functional-Light-JS
+https://github.com/getify/Functional-Light-JS
