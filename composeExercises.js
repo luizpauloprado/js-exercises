@@ -1,4 +1,4 @@
-import _ from "ramda";
+import R from "ramda";
 
 // https://github.com/MostlyAdequate/mostly-adequate-guide/blob/master/code/part1_exercises/answers/compose/compose_exercises.js
 // https://github.com/MostlyAdequate/mostly-adequate-guide/blob/master/code/part1_exercises/answers/compose/compose_exercises_spec.js
@@ -50,18 +50,18 @@ export const CARS = [
   var last_car = _.last(cars);
   return _.prop("in_stock", last_car);
 };*/
-export const isLastInStock = _.compose(_.prop("in_stock"), _.last);
+export const isLastInStock = R.compose(R.prop("in_stock"), R.last);
 
 // Exercise 2:
 // ============
 // Use _.compose(), _.prop() and _.head() to retrieve the name of the first car.
-export const nameOfFirstCar = _.compose(_.prop("name"), _.head);
+export const nameOfFirstCar = R.compose(R.prop("name"), R.head);
 
 // Exercise 3:
 // ============
 // Use the helper function _average to refactor averageDollarValue as a composition.
 const _average = function(xs) {
-  return _.reduce(_.add, 0, xs) / xs.length;
+  return R.reduce(R.add, 0, xs) / xs.length;
 }; // <- leave be
 
 /*
@@ -71,18 +71,18 @@ var averageDollarValue = function(cars) {
   }, cars);
   return _average(dollar_values);
 };*/
-export const averageDollarValue = _.compose(
+export const averageDollarValue = R.compose(
   _average,
-  _.map(_.prop("dollar_value"))
+  R.map(R.prop("dollar_value"))
 );
 
 // Exercise 4:
 // ============
 // Write a function: sanitizeNames() using compose that returns a list of lowercase and underscored car's names: e.g: sanitizeNames([{name: 'Ferrari FF', horsepower: 660, dollar_value: 700000, in_stock: true}]) //=> ['ferrari_ff'].
 
-const _underscore = _.replace(/\W+/g, "_"); //<-- leave this alone and use to sanitize
-export const sanitizeNames = _.map(
-  _.compose(_underscore, _.toLower, _.prop("name"))
+const _underscore = R.replace(/\W+/g, "_"); //<-- leave this alone and use to sanitize
+export const sanitizeNames = R.map(
+  R.compose(_underscore, R.toLower, R.prop("name"))
 );
 
 // Bonus 1:
@@ -99,11 +99,11 @@ var availablePrices = function(cars) {
 };*/
 
 const formatMoney = val => `USD ${val}`;
-const formatPrice = _.compose(formatMoney, _.prop("dollar_value"));
-export const availablePrices = _.compose(
-  _.join(", "),
-  _.map(formatPrice),
-  _.filter(_.prop("in_stock"))
+const formatPrice = R.compose(formatMoney, R.prop("dollar_value"));
+export const availablePrices = R.compose(
+  R.join(", "),
+  R.map(formatPrice),
+  R.filter(R.prop("in_stock"))
 );
 // Bonus 2:
 // ============
@@ -117,4 +117,4 @@ var fastestCar = function(cars) {
   return fastest.name + " is the fastest";
 };*/
 
-export const fastestCar = _.compose(_.prop("name"), _.last, _.sortBy(_.prop("horsepower")))
+export const fastestCar = R.compose(R.prop("name"), R.last, R.sortBy(R.prop("horsepower")))
